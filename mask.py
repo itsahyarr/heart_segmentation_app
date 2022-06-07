@@ -140,6 +140,7 @@ def predict(file_path):
 #   model.load_weights('model/heart_segmentation.h5')
   for image in test1.take(1):
     pred_mask = model.predict(image[tf.newaxis, ...])[0]
+    # pred_mask = model.predict(image[])
   return image, pred_mask
 
 # https://pythontic.com/image-processing/pillow/blend
