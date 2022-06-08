@@ -27,8 +27,8 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="index.html">Home</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="index.html">About</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="login.html">Home</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#about">About</a></li>
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="login.html">Sign In</a></li>
                     </ul>
                 </div>
@@ -37,8 +37,10 @@
         <!-- Masthead-->
         <header class="masthead bg-primary text-secondary text-center">
             <div class="container d-flex align-items-center flex-column">
-                                <!-- Masthead Heading-->
-                <h1 class="masthead-heading text-uppercase mb-0  ">Sign In</h1>
+                <!-- Masthead Avatar Image-->
+                <img class="masthead-avatar mb-5" src="heart.png" alt="..." />
+                <!-- Masthead Heading-->
+                <h1 class="masthead-heading text-uppercase mb-0  ">Heart Segmentation</h1>
                 <!-- Icon Divider-->
                 <div class="divider-custom divider-light">
                     <div class="divider-custom-line"></div>
@@ -46,28 +48,30 @@
                     <div class="divider-custom-line"></div>
                 </div>
                 <!-- Masthead Subheading-->
-                    <tr>
-                    <td>Name</td>                    
-                    <td><input type="text"></td>
-                    </tr>
-                    
-                    <tr>
-                        <td>NIP</td>
-                        <td><input type="text"></td>
-                        </tr>
-                    
-                    <tr>
-                        <td>Password</td>                        
-                        <td><input type="password"></td>
-                        </tr>
-                 <div class="text-center mt-4">
-                    <a class="btn btn-xl btn-outline-light" href="main.html">
-                        <i class="fas fa-heart"></i>
-                        Sign In
-                    </a>
-                </div>    
-                </div>
+                <p class="masthead-subheading font-weight-light mb-0">Unsupervised segmentation of the heart on CT scans</p>
+            </div>
         </header>
-    
         
- 
+        <!-- About Section-->
+        <section class="page-section bg-secondary text-white mb-0" id="about">
+            <div class="container">
+                <!-- About Section Heading-->
+                <h2 class="page-section-heading text-center text-uppercase text-white">Drop Your File Here</h2>
+                <!-- Icon Divider-->
+                <div class="divider-custom divider-light">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-heart"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                
+                <!-- About Section Button-->
+                <div class="text-center mt-4">
+                    <a class="btn btn-xl btn-outline-light" href= "">
+                        <i class="fas fa-file"></i>
+                        Choose File
+                    </a>
+                </div>
+            </div>
+        </section>
+       
+       
