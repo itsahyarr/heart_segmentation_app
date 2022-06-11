@@ -126,24 +126,18 @@ def predict(file_path):
   '''
   image = parse_image(file_path, resize = True)
   test1 = tf.data.Dataset.from_tensor_slices([image])
-  # Loading best model
-  # model = Nested_UNet(3)
-  # model.compile(optimizer='adam', loss=sm.losses.dice_loss, metrics=[dice_coef])
-  ###
-#   model = models.Model(inputs=[Resnet.input], outputs=[outputs1])
 
   model = tf.keras.models.load_model('model/heart_segmentation.h5', custom_objects={'Functional':tf.keras.models.Model})
   model.compile(optimizer = tf.keras.optimizers.Adam(lr=0.005), loss = losses.sparse_categorical_crossentropy,metrics = ['sparse_categorical_accuracy'] )
-#   model = models.Model(inputs=[Resnet.input], outputs=[outputs1])
+
   te = test1.batch(1)
   model.predict(te)
-#   model.load_weights('model/heart_segmentation.h5')
+
   for image in test1.take(1):
     pred_mask = model.predict(image[tf.newaxis, ...])[0]
-    # pred_mask = model.predict(image[])
+
   return image, pred_mask
 
-# https://pythontic.com/image-processing/pillow/blend
 # Function to change the image size
 def changeImageSize(maxWidth, 
                     maxHeight, 
@@ -158,7 +152,6 @@ def changeImageSize(maxWidth,
     newImage    = image.resize((newWidth, newHeight))
     return newImage
 
-# https://github.com/gxercavins/image-api
 app = Flask(__name__)
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
