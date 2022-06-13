@@ -4,6 +4,7 @@ from flask import Flask, request, render_template, send_from_directory
 import os
 import pathlib
 from PIL import Image
+from io import BytesIO
 import tensorflow as tf
 tf.compat.v1.enable_eager_execution()
 import matplotlib.pyplot as plt
@@ -16,6 +17,7 @@ from tensorflow.keras.models import Model, load_model
 from tensorflow.keras.layers import *
 from tensorflow.keras import regularizers, layers, models, losses
 import segmentation_models as sm
+import base64
 
 #https://jinglescode.github.io/datascience/2019/12/02/biomedical-image-segmentation-u-net-nested/
 #Unet++
@@ -152,6 +154,13 @@ def changeImageSize(maxWidth,
     newImage    = image.resize((newWidth, newHeight))
     return newImage
 
+# Convert image to base64
+def get_base64(image):
+    buffered = BytesIO()
+    image.save(buffered, format="JPEG")
+    img_str = base64.b64encode(buffered.getvalue())
+    return "data:image/jpeg;base64," + img_str.decode()
+
 app = Flask(__name__)
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -161,7 +170,6 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 @app.route("/")
 def main():
     return render_template('index.html')
-
 
 # upload selected image and forward to processing page
 @app.route("/upload", methods=["POST"])
@@ -210,7 +218,7 @@ def Predict():
     image1, pred_mask = predict(file_path)
     image = tf.keras.preprocessing.image.array_to_img(image1)
     mask = tf.keras.preprocessing.image.array_to_img(pred_mask)
-    pred = Image.blend(image, mask, alpha=.6)
+    pred = Image.blend(image, mask, alpha=0.35)
     final = changeImageSize(img.size[0], img.size[1], pred)
     
     # save and return image
@@ -219,16 +227,15 @@ def Predict():
         os.remove(destination)
     final.save(destination)
 
-    return send_image('temp1.png')
-    # forward to processing page
-    #return render_template("predict.html")
+    # return send_image('temp1.png')
 
+    # forward to processing page
+    return render_template("processing.html", result=get_base64(final))
 
 # retrieve file from 'static/images' directory
 @app.route('/static/images/<filename>')
 def send_image(filename):
     return send_from_directory("static/images", filename)
-
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
