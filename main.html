@@ -65,11 +65,19 @@
                 </div>
                 
                 <!-- About Section Button-->
-                <div class="text-center mt-4">
-                    <a class="btn btn-xl btn-outline-light" href= "">
+                <!-- <div class="text-center mt-4">
+                    <form class="btn btn-xl btn-outline-light" href= "">
                         <i class="fas fa-file"></i>
-                        Choose File
-                    </a>
+                        <input type="file" name="file" id="file-picker" accept="image/*" class="hidden" onchange="this.form.submit()">
+                        <label for="file-picker">Choose File</label>
+                    </form>
+                </div> -->
+                <div class="input-group mb-3">
+                    <form action="{{ url_for('upload') }}" id="upload-form" method="POST" enctype="multipart/form-data">
+                        <input type="file" name="file" accept="image/*" class="form-control" id="file-picker" onchange="this.form.submit()">
+                        <!-- <label class="input-group-text" for="file-picker">Upload</label> -->
+                    </form>
+                    
                 </div>
             </div>
         </section>
