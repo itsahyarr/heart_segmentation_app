@@ -27,10 +27,9 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/#">Home</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="login.html">Home</a></li>
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#about">About</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/#signin">Sign In</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/signup">Sign Up</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="login.html">Sign In</a></li>
                     </ul>
                 </div>
             </div>
@@ -57,26 +56,30 @@
         <section class="page-section bg-secondary text-white mb-0" id="about">
             <div class="container">
                 <!-- About Section Heading-->
-                <h2 class="page-section-heading text-center text-uppercase text-white">About</h2>
+                <h2 class="page-section-heading text-center text-uppercase text-white">Drop Your File Here</h2>
                 <!-- Icon Divider-->
                 <div class="divider-custom divider-light">
                     <div class="divider-custom-line"></div>
                     <div class="divider-custom-icon"><i class="fas fa-heart"></i></div>
                     <div class="divider-custom-line"></div>
                 </div>
-                <!-- About Section Content-->
-                <div class="row">
-                    <div class="col-lg-10 ms-auto"><p class="text-center">Whole heart segmentation from cardiac CT scans is a prerequisite for many clinical applications, but manual delineation is a tedious task and subject to both intra- and inter-observer variation. Automating the segmentation process has thus become an increasingly popular task in the field of image analysis, and is generally solved by either using 3D methods, considering the image volume as a whole, or 2D methods, segmenting each slice independently.</p></div>
-                </div>
+                
                 <!-- About Section Button-->
-                <div class="text-center mt-4" id="signin">
-                    <a class="btn btn-xl btn-outline-light" href="signin">
-                        <i class="fas fa-heart"></i>
-                        Sign In
-                    </a>
+                <!-- <div class="text-center mt-4">
+                    <form class="btn btn-xl btn-outline-light" href= "">
+                        <i class="fas fa-file"></i>
+                        <input type="file" name="file" id="file-picker" accept="image/*" class="hidden" onchange="this.form.submit()">
+                        <label for="file-picker">Choose File</label>
+                    </form>
+                </div> -->
+                <div class="input-group mb-3">
+                    <form action="{{ url_for('upload') }}" id="upload-form" method="POST" enctype="multipart/form-data">
+                        <input type="file" name="file" accept="image/*" class="form-control" id="file-picker" onchange="this.form.submit()">
+                        <!-- <label class="input-group-text" for="file-picker">Upload</label> -->
+                    </form>
+                    
                 </div>
             </div>
         </section>
-    </body>
-</html>
- 
+       
+       

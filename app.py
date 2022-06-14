@@ -18,6 +18,7 @@ from tensorflow.keras.layers import *
 from tensorflow.keras import regularizers, layers, models, losses
 import segmentation_models as sm
 import base64
+import psycopg2
 
 #https://jinglescode.github.io/datascience/2019/12/02/biomedical-image-segmentation-u-net-nested/
 #Unet++
@@ -161,6 +162,16 @@ def get_base64(image):
     img_str = base64.b64encode(buffered.getvalue())
     return "data:image/jpeg;base64," + img_str.decode()
 
+# Database connection
+def get_db_connection():
+    connection = psycopg2.connect(
+        host = 'localhost',
+        database = 'heart_segmentation_db',
+        user = os.environ['archdev'],
+        password = os.environ['archdev']
+    )
+    return connection
+
 app = Flask(__name__)
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -170,6 +181,19 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 @app.route("/")
 def main():
     return render_template('index.html')
+
+@app.route("/main")
+def mainpage():
+    return render_template('main.html')
+
+@app.route("/signin")
+def signin():
+    return render_template('signin.html')
+
+@app.route("/signup")
+def signup():
+    return render_template('signup.html')
+
 
 # upload selected image and forward to processing page
 @app.route("/upload", methods=["POST"])

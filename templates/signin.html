@@ -27,47 +27,52 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="index.html">Home</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="index.html">About</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="login.html">Sign In</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/#">Home</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/#about">About</a></li>
+                        <!--<li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="login.html">Sign In</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="login.html">Sign Up</a></li>-->
                     </ul>
                 </div>
             </div>
         </nav>
         <!-- Masthead-->
         <header class="masthead bg-primary text-secondary text-center">
-            <div class="container d-flex align-items-center flex-column">
+            <form action="post">
+                <div class="container d-flex align-items-center flex-column">
                                 <!-- Masthead Heading-->
-                <h1 class="masthead-heading text-uppercase mb-0  ">Sign In</h1>
-                <!-- Icon Divider-->
-                <div class="divider-custom divider-light">
-                    <div class="divider-custom-line"></div>
-                    <div class="divider-custom-icon"><i class="fas fa-heart bs-pink"></i></div>
-                    <div class="divider-custom-line"></div>
-                </div>
-                <!-- Masthead Subheading-->
+                    <h1 class="masthead-heading text-uppercase mb-0  ">Sign In</h1>
+                    <!-- Icon Divider-->
+                    <div class="divider-custom divider-light">
+                        <div class="divider-custom-line"></div>
+                        <div class="divider-custom-icon"><i class="fas fa-heart bs-pink"></i></div>
+                        <div class="divider-custom-line"></div>
+                    </div>
+                    <!-- Masthead Subheading-->
+                
                     <tr>
-                    <td>Name</td>                    
-                    <td><input type="text"></td>
+                        <td>NIP</td>
+                        <td><input type="text" name="nip" pattern="[0-9]"></td>
                     </tr>
                     
                     <tr>
-                        <td>NIP</td>
-                        <td><input type="text"></td>
-                        </tr>
-                    
-                    <tr>
                         <td>Password</td>                        
-                        <td><input type="password"></td>
-                        </tr>
-                 <div class="text-center mt-4">
-                    <a class="btn btn-xl btn-outline-light" href="main.html">
+                        <td><input type="password" name="password"></td>
+                    </tr>
+                </div>        
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-xl btn-outline-light"><i class="fas fa-heart"></i> Sign In</button>
+                    <!-- <a class="btn btn-xl btn-outline-light" href="main.html">
                         <i class="fas fa-heart"></i>
                         Sign In
-                    </a>
+                    </a> -->
                 </div>    
+                <div class="row">
+                    <div class="col-lg-15 ms-auto"><p class="text-center">Don't have an account yet? <a class="text-decoration-none" href="signup">Sign Up</a></p></div>                    
                 </div>
+            </form>
         </header>
-    
+    </body>
+</html>
+
         
  
