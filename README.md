@@ -1,7 +1,7 @@
 # Heart Segmentation App 
 Artificial Intelligence Project
 
-#### How to run this app in a [conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html) :
+#### How to run this app in a local server using [conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html) :
 1. First, install [`conda`](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) on your device. I personally recommended the _***Miniconda***_
 2. Clone this repository and go to the repo directory
    - `git clone https://github.com/itsahyarr/heart_segmentation_app.git`
