@@ -1,7 +1,16 @@
-# web-app for API image manipulation
-from flask import Flask, request, render_template, send_from_directory
+from unicodedata import category
+
+from flask import Blueprint, render_template, request, flash, redirect, url_for, send_from_directory
+from .models import User
+from werkzeug.security import generate_password_hash, check_password_hash
+from . import db
+from flask_login import login_user, login_required, logout_user, current_user
+import base64
+from io import BytesIO
+
 #import tensorflow.contrib.eager as tfe
 import os
+from os import path
 import pathlib
 from PIL import Image
 from io import BytesIO
@@ -18,13 +27,10 @@ from tensorflow.keras.layers import *
 from tensorflow.keras import regularizers, layers, models, losses
 import segmentation_models as sm
 import base64
-import psycopg2
 
-#https://jinglescode.github.io/datascience/2019/12/02/biomedical-image-segmentation-u-net-nested/
-#Unet++
+auth = Blueprint('auth', __name__)
 
 class conv_block_nested(tf.keras.Model):
-
     def __init__(self, in_ch):
         super(conv_block_nested, self).__init__()
         self.activation = layers.Activation('relu')
@@ -32,7 +38,7 @@ class conv_block_nested(tf.keras.Model):
         self.bn1 = layers.BatchNormalization()
         self.conv2 = layers.Conv2D(in_ch, 3, padding='same')
         self.bn2 = layers.BatchNormalization()
-
+        
     def call(self, x):
         x = self.conv1(x)
         x = self.bn1(x)
@@ -45,7 +51,6 @@ class conv_block_nested(tf.keras.Model):
         return output
 
 class Nested_UNet(tf.keras.Model):
-
     def __init__(self, out_ch=3):
         super(Nested_UNet, self).__init__()
 
@@ -130,7 +135,7 @@ def predict(file_path):
   image = parse_image(file_path, resize = True)
   test1 = tf.data.Dataset.from_tensor_slices([image])
 
-  model = tf.keras.models.load_model('model/heart_segmentation.h5', custom_objects={'Functional':tf.keras.models.Model})
+  model = tf.keras.models.load_model('website/model/heart_segmentation.h5', custom_objects={'Functional':tf.keras.models.Model})
   model.compile(optimizer = tf.keras.optimizers.Adam(lr=0.005), loss = losses.sparse_categorical_crossentropy,metrics = ['sparse_categorical_accuracy'] )
 
   te = test1.batch(1)
@@ -162,41 +167,65 @@ def get_base64(image):
     img_str = base64.b64encode(buffered.getvalue())
     return "data:image/jpeg;base64," + img_str.decode()
 
-# Database connection
-def get_db_connection():
-    connection = psycopg2.connect(
-        host = 'localhost',
-        database = 'heart_segmentation_db',
-        user = os.environ['archdev'],
-        password = os.environ['archdev']
-    )
-    return connection
-
-app = Flask(__name__)
-
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
+@auth.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        nip = request.form.get('nip')
+        password = request.form.get('password')
 
-# default access page
-@app.route("/")
-def main():
-    return render_template('index.html')
+        user = User.query.filter_by(nip=nip).first()
+        if user:
+            if check_password_hash(user.password, password):
+                flash('Login successfully!', category='success')
+                login_user(user, remember=True)
+                return redirect(url_for('views.home'))
+            else:
+                flash('Incorrect password, try again!', category='error')
+        else:
+            flash('NIP doesn\'t exist.', category='error')
 
-@app.route("/main")
-def mainpage():
-    return render_template('main.html')
+    return render_template("login.html", user=current_user)
 
-@app.route("/signin")
-def signin():
-    return render_template('signin.html')
+@auth.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('auth.login'))
 
-@app.route("/signup")
-def signup():
-    return render_template('signup.html')
+@auth.route('/sign-up', methods=['GET', 'POST'])
+def sign_up():
+    if request.method == 'POST':
+        nip = request.form.get('nip')
+        name = request.form.get('name')
+        password1 = request.form.get('password1')
+        password2 = request.form.get('password2')
+
+        user = User.query.filter_by(nip=nip).first()
+        if user:
+            flash('NIP already exists.', category='error')
+        elif len(nip) < 6:
+            flash('NIP at least 6 character.', category='error')
+        elif len(name) < 3:
+            flash('Name must be greater than 2 character.', category='error')
+        elif password1 != password2:
+            flash('Passwords don\'t match.', category='error')
+        elif len(password1) < 8:
+            flash('Password must be at least 8 characters.', category='error')
+        else:
+            # Add user to the database
+            new_user = User(nip=nip, name=name, password=generate_password_hash(password1, method='sha256'))
+            db.session.add(new_user)
+            db.session.commit()
+            login_user(new_user, remember=True)
+            flash('Account created!', category='success')
+            return redirect(url_for('views.main'))  # the 'views' must be registered as Blueprint first
+    return render_template("sign_up.html", user=current_user)
 
 
-# upload selected image and forward to processing page
-@app.route("/upload", methods=["POST"])
+
+@auth.route("/upload", methods=["POST"])
 def upload():
     target = os.path.join(APP_ROOT, 'static/images/')
 
@@ -222,11 +251,11 @@ def upload():
     upload.save(destination)
 
     # forward to processing page
-    return render_template("processing.html", image_name=filename)
+    return render_template("processing.html", image_name=filename, user=current_user)
 
 
 # Image segmentation
-@app.route("/Predict", methods=["POST"])
+@auth.route("/Predict", methods=["POST"])
 def Predict():
 
     filename = request.form['image']
@@ -254,13 +283,9 @@ def Predict():
     # return send_image('temp1.png')
 
     # forward to processing page
-    return render_template("processing.html", result=get_base64(final))
+    return render_template("processing.html", result=get_base64(final), user=current_user)
 
 # retrieve file from 'static/images' directory
-@app.route('/static/images/<filename>')
+@auth.route('/static/images/<filename>')
 def send_image(filename):
     return send_from_directory("static/images", filename)
-
-if __name__ == "__main__":
-    app.run(port=5000, debug=True)
-
