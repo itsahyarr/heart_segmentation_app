@@ -14,3 +14,5 @@ Artificial Intelligence Project
    - `python main.py`
 6. It will run on `http://localhost:5000` or `http://127.0.0.1:5000` by default
 7. Create an account (just random data) and then login to access the main page. After logged in, you can upload the heart image scan and get the segmentation result.
+
+> Note : if the .h5 file is corrupted while cloning the repository, please do a manual download that file :)
